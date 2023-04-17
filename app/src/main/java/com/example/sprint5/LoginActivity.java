@@ -3,9 +3,12 @@ package com.example.sprint5;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,4 +29,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(intencao);
         }
     }
+    // Inside your login activity
+// Collect login credentials
+    String email = "example@example.com";
+    String senha = "mypassword";
+
+    // Query "usuarios" table for email and password
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
+    SQLiteDatabase db = dbHelper.getReadableDatabase();
+    String selection = "email = ? AND senha = ?";
+    String[] selectionArgs = {email, senha};
+    Cursor cursor = db.query(
+            "usuarios",
+            null,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+    );
+
 }
