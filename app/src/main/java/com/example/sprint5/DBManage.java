@@ -4,25 +4,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
-import com.example.sprint5.DatabaseHelper;
 
 public class DBManage {
 
     private SQLiteDatabase db;
-    private DatabaseHelper banco;
+    private CreateDB banco;
 
     public DBManage(Context context) {
-        banco = new DatabaseHelper(context);
+        banco = new CreateDB(context);
     }
 
-
-
-    public String insereDadosCadastrados(String email, String senha) {
+    public String CriaUsuario(String email, String senha) {
         ContentValues valores;
         long resultado;
         db = banco.getWritableDatabase();
-
         valores = new ContentValues();
         valores.put("email", email);
         valores.put("senha", senha);
@@ -31,17 +26,14 @@ public class DBManage {
         db.close();
 
         if (resultado == -1)
-            return "Erro ao inserir registro os dados, tente novamente!";
+            return "Erro ao cadastrar informações";
         else
-            return "Dados do Usuário cadastrado com sucesso!";
+            return "Usuário criado com sucesso";
     }
-
-
-
-    public Cursor carregaDadosLogin(String email, String senha) {
+    public Cursor LoginData(String Email, String Senha) {
         Cursor cursor;
-        String[] campos = { "codigo", "nome", "email", "senha" };
-        String where = "email = '" + email + "' and senha = '" + senha + "'";
+        String[] campos = { "email", "senha" };
+        String where = "email = '" + Email + "' and senha = '" + Senha + "'";
         db = banco.getReadableDatabase();
         cursor = db.query("cadastrados", campos, where, null, null, null,
                 null, null);
@@ -52,6 +44,4 @@ public class DBManage {
         db.close();
         return cursor;
     }
-
-
 }

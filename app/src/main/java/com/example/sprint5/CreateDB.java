@@ -10,11 +10,13 @@ public class CreateDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-    String sql = "CREATE TABLE cadastrados ("
-            + "codigo integer primary key autoincrement,"
-            + "email text,"
-            + "senha text)";
-    db.execSQL(sql);
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS cadastrados (" +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "Email TEXT NOT NULL," +
+                "Senha TEXT NOT NULL," +
+                "UNIQUE(Email)," +
+                "UNIQUE(_id));";
+        db.execSQL(createTableQuery);
     }
 
     @Override

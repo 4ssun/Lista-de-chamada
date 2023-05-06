@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main extends AppCompatActivity implements View.OnClickListener{
@@ -59,21 +62,46 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
 
                         }
                     }
+                    private void exportListToTextFile() {
+                        StringBuilder sb = new StringBuilder();
+                        for (String thing : listOfThings) {
+                            sb.append(thing).append("\n");
+                        }
+
+                        try {
+                            File file = new File(getExternalFilesDir(null), "list_of_things.txt");
+                            FileWriter writer = new FileWriter(file);
+                            writer.write(sb.toString());
+                            writer.close();
+                            Toast.makeText(Main.this, "List exported successfully", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Main.this, "Failed to export list", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    protected void onCreate(Bundle savedInstanceState) {
+
+                        Button submitButtonExportar_1 = findViewById(R.id.submitButtonExportar);
+                        submitButtonExportar_1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                exportListToTextFile();
+                            }
+                        });
+
+                    }
+
                 });
 
             }
 
         });
 
-        if (savedInstanceState != null) {
-            listOfThings = savedInstanceState.getStringArrayList(LIST_KEY);
-            updateListTextView();
-        }
 
     }
 
     private void updateListTextView() {
-        // Update the text view with the current list of things
         StringBuilder sb = new StringBuilder();
         for (String thing : listOfThings) {
             sb.append(thing).append("\n");
@@ -89,15 +117,6 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.submitButtonNovo) {
-            Intent intencao_1 = new Intent(this, Main.class);
-            startActivity(intencao_1);
-            submitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
-                }
-            });
-        }
     }
 }
